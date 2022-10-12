@@ -12,11 +12,11 @@ public class WiselyTenantRoutingDatasource  extends AbstractRoutingDataSource {
     private final WiselyTenantIdResolver wiselyTenantIdResolver;
 
     public WiselyTenantRoutingDatasource(WiselyTenantIdResolver wiselyTenantIdResolver) {
-        setDefaultTargetDataSource(createDatabase("jdbc:mysql://127.0.0.1:3306/public"));
         this.wiselyTenantIdResolver = wiselyTenantIdResolver;
+        setDefaultTargetDataSource(createDatabase("jdbc:mysql://127.0.0.1:3306/public", "root", "example"));
         HashMap<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put("companya",createDatabase("jdbc:mysql://127.0.0.1:3306/companya"));
-        targetDataSources.put("companyb",createDatabase("jdbc:mysql://127.0.0.1:3306/companyb"));
+        targetDataSources.put("companya",createDatabase("jdbc:mysql://127.0.0.1:3306/companya", "root", "example"));
+        targetDataSources.put("companyb",createDatabase("jdbc:mysql://127.0.0.1:3306/companyb", "root", "example"));
         setTargetDataSources(targetDataSources);
     }
 
@@ -27,12 +27,12 @@ public class WiselyTenantRoutingDatasource  extends AbstractRoutingDataSource {
     }
 
 
-    private DataSource createDatabase(String databaseUrl) {
+    private DataSource createDatabase(String databaseUrl, String username, String password) {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
         dataSourceBuilder.url(databaseUrl);
-        dataSourceBuilder.username("root");
-        dataSourceBuilder.password("example");
+        dataSourceBuilder.username(username);
+        dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
     }
 }
